@@ -1,19 +1,17 @@
-import * as React from "react";
-import { StrictMode } from 'react';
-import * as ReactDom from "react-dom/client";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import QuestionList from './QuestionList';
+import ShowQuestion from './ShowQuestion'; // Import your detail component
 
 const Welcome = () => {
-	return(
-		<QuestionList />
-		)
-}
-
-const root = ReactDom.createRoot(document.getElementById('welcome'))
-root.render(
-  <StrictMode>
-	 <Welcome />
-  </StrictMode>
-	)
+  return (
+    <Router>
+      <Routes>
+        <Route path="/questions" element={<QuestionList />} />
+        <Route path="/questions/:id" element={<ShowQuestion />} />
+      </Routes>
+    </Router>
+  );
+};
 
 export default Welcome;

@@ -1,14 +1,15 @@
-import * as React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-const ShowQuestion = ({ questionId }) => {
+const ShowQuestion = () => {
+  const { id } = useParams()
   const [questionDetails, setQuestionDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (questionId) {
-      fetch(`/api/v1/questions/${questionId}`, {
+    if (id) {
+      fetch(`/api/v1/questions/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -30,7 +31,7 @@ const ShowQuestion = ({ questionId }) => {
           setIsLoading(false);
         });
     }
-  }, [questionId]);
+  }, [id]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -45,10 +46,13 @@ const ShowQuestion = ({ questionId }) => {
   }
 
   return (
-    <div>
-      <h3>{questionDetails.title}</h3>
-      <p>{questionDetails.tag}</p>
-      <p>{questionDetails.content}</p>
+    <div className="card rounded-0 mt-3">
+      <div className="card-body">
+        <h3 className="card-title">{questionDetails.title}</h3>
+        <p className="lead">
+          <span className="badge bg-primary">{questionDetails.tag}</span>
+        </p>
+      </div>
     </div>
   );
 };
