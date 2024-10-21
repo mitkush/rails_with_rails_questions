@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import QuestionDetail from "./QuestionDetail"
 
 const ShowQuestion = () => {
   const { id } = useParams()
@@ -46,13 +47,8 @@ const ShowQuestion = () => {
   }
 
   return (
-    <div className="card rounded-0 mt-3">
-      <div className="card-body">
-        <h3 className="card-title">{questionDetails.title}</h3>
-        <p className="lead">
-          <span className="badge bg-primary">{questionDetails.tag}</span>
-        </p>
-      </div>
+    <div>
+      <QuestionDetail question={questionDetails} />
     </div>
   );
 };

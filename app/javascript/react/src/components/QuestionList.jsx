@@ -5,7 +5,6 @@ import QuestionDetail from "./QuestionDetail"
 import EmptyQuestionMessage from './EmptyQuestionMessage'
 import Loader from './Loader'
 import NewQuestion from './NewQuestion'
-import { useNavigate } from "react-router-dom";
 
 const QuestionList = () => {
 
@@ -22,7 +21,6 @@ const QuestionList = () => {
   const [selectedOption, setSelectedOption] = useState(questionsTags[0].value)
   const [isShowAlert, setIsShowAlert] = useState(false)
   const [isShowLoader, setIsShowLoader] = useState(true)
-  const navigate = useNavigate();
 
   const questionsUrl = '/api/v1/questions'
 
@@ -79,7 +77,7 @@ const QuestionList = () => {
         </select>
         { questionsList.length > 0 ?
           questionsList.map((question) =>
-            <div key={question.id} onClick={() => navigate(`/questions/${question.id}`)}>
+            <div key={question.id}>
               <QuestionDetail question={question} />
             </div>
           ) : <Loader isShowLoader={isShowLoader} />
