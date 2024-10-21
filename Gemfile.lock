@@ -75,8 +75,6 @@ GEM
     base64 (0.2.0)
     bigdecimal (3.1.8)
     bindex (0.8.1)
-    bootsnap (1.18.4)
-      msgpack (~> 1.2)
     brakeman (6.2.1)
       racc
     builder (3.3.0)
@@ -119,7 +117,6 @@ GEM
     marcel (1.0.4)
     mini_mime (1.1.5)
     minitest (5.25.1)
-    msgpack (1.7.3)
     net-imap (0.4.17)
       date
       net-protocol
@@ -236,6 +233,15 @@ GEM
     stimulus-rails (1.3.4)
       railties (>= 6.0.0)
     stringio (3.1.1)
+    tailwindcss-rails (3.0.0)
+      railties (>= 7.0.0)
+      tailwindcss-ruby
+    tailwindcss-ruby (3.4.14)
+    tailwindcss-ruby (3.4.14-aarch64-linux)
+    tailwindcss-ruby (3.4.14-arm-linux)
+    tailwindcss-ruby (3.4.14-arm64-darwin)
+    tailwindcss-ruby (3.4.14-x86_64-darwin)
+    tailwindcss-ruby (3.4.14-x86_64-linux)
     thor (1.3.2)
     timeout (0.4.1)
     turbo-rails (2.0.10)
@@ -265,7 +271,6 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  bootsnap
   brakeman
   byebug
   cssbundling-rails
@@ -278,6 +283,7 @@ DEPENDENCIES
   rubocop-rails-omakase
   sprockets-rails
   stimulus-rails
+  tailwindcss-rails (~> 3.0)
   turbo-rails
   tzinfo-data
   web-console
