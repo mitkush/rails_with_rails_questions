@@ -5,6 +5,8 @@ import QuestionDetail from "./QuestionDetail"
 import EmptyQuestionMessage from './EmptyQuestionMessage'
 import Loader from './Loader'
 import NewQuestion from './NewQuestion'
+import SignUp from './SignUp';
+import { useNavigate } from "react-router-dom";
 
 const QuestionList = () => {
 
@@ -21,6 +23,7 @@ const QuestionList = () => {
   const [selectedOption, setSelectedOption] = useState(questionsTags[0].value)
   const [isShowAlert, setIsShowAlert] = useState(false)
   const [isShowLoader, setIsShowLoader] = useState(true)
+  const navigate = useNavigate();
 
   const questionsUrl = '/api/v1/questions'
 
@@ -49,15 +52,15 @@ const QuestionList = () => {
     setQuestionsList([])
     setSelectedOption(event.target.value)
     fetch(questionsUrl + `?tags=${questionsTags[event.target.value].label}`)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data)
-        setQuestionsList(data)
-        if(data.length == 0) {
-          setIsShowAlert(true)
-          setIsShowLoader(true)
-        }
-      })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data)
+      setQuestionsList(data)
+      if(data.length == 0) {
+        setIsShowAlert(true)
+        setIsShowLoader(true)
+      }
+    })
   }
 
   return(
@@ -66,6 +69,9 @@ const QuestionList = () => {
         <p className="lead fw-bold">Filter Questions by Tags</p>
         <button type="button" className="btn btn-primary mt-3 mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
           Contribute your Question
+        </button>
+        <button type="button" className="btn btn-success mt-3 mb-3" style={{marginLeft: 1 + 'em'}} onClick={() => navigate(`/SignUp`)}>
+          Sign Up
         </button>
         <select
           className="form-select form-select-lg rounded-0"

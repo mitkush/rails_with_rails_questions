@@ -17,6 +17,8 @@ Rails.application.routes.draw do
           put :update_counter
         end
       end
+      resources :accounts, only: [:create]
+      post 'login', to: 'sessions#create'
     end
   end
   get '*path', to: 'homepage#index'
