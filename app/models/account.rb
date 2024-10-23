@@ -3,5 +3,5 @@ class Account < ApplicationRecord
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true
-  validates :password, presence: true, length: { minimum: 6 }
+  validates :password, length: { minimum: 6 }
 end

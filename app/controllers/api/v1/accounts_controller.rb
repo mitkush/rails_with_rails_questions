@@ -7,7 +7,11 @@ class Api::V1::AccountsController < ApplicationController
     if account.save
       render json: { message: 'Account created successfully' }, status: :created
     else
-      render json: { error: account.errors.full_messages.join(', ') }, status: :unprocessable_entity
+      error_messages = account.errors.messages.transform_values do |messages|
+        messages.map(&:to_s)
+      end
+
+      render json: { errors: error_messages }, status: :unprocessable_entity
     end
   end
 

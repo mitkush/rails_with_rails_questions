@@ -21,23 +21,23 @@ const NewQuestion = () => {
     tag: questionsTags[0].value
   })
 
-  const handleQuestionSubmit = (event) => {
+  const handleQuestionSubmit = () => {
     event.preventDefault();
-    console.log(formField)
-    createQuestion(formField)
+    createQuestion()
   }
 
-  const handleFormFields = (event) => {
-    setFormField({ ...formField, [event.target.name]: event.target.value})
+  const handleFormFields = () => {
+    let field = event.target
+    setFormField({ ...formField, [field.name]: field.value})
   }
 
-  const createQuestion = (data) => {
+  const createQuestion = () => {
     fetch(`/api/v1/questions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(formField)
     })
     .then((response) => response.json())
     .then((data) => {
@@ -80,7 +80,6 @@ const NewQuestion = () => {
               </div>
             </div>
             <div className="modal-footer">
-              {/* <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button> */}
               <button type="submit" className="btn btn-primary" data-bs-dismiss="modal">Submit Question</button>
             </div>
           </form>

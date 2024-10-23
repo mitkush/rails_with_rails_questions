@@ -1,48 +1,66 @@
 import React, { useState } from 'react';
+import ServerSideError from './ServerSideError';
+import { useNavigate } from "react-router-dom";
+
 
 const SignUp = () => {
+  const [isServerSideError, setIsServerSideError] = useState(false)
+  const [serverErrors, setServerErrors] = useState({})
   const [formField, setFormField] = useState({
     name: '',
     email: '',
     password: '',
-    passwordConfirmation: '',
-    termsAgreed: false,
   });
+  const navigate = useNavigate();
+  const [passwordMatchingError, setPasswordMatchingError] = useState("");
+  const [isPasswordMatched, setIsPasswordMatched] = useState(false);
 
-  const handleInputChange = (event) => {
+  const handleInputChange = () => {
     const { name, value, type, checked } = event.target;
-    setFormField((prev) => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
+    setFormField({...formField, [name]: value });
   };
 
-  const handleSignUpSubmit = (event) => {
+  const handleSignUpSubmit = () => {
     event.preventDefault();
-    console.log(formField);
-    createQuestion(formField);
+    createSignUp(formField);
   };
 
-  const createQuestion = (data) => {
+  const handlePasswordMatching = (event) => {
+    const { name, value } = event.target;
+
+    if (formField.password !== value) {
+        setPasswordMatchingError("Passwords do not match");
+        setIsPasswordMatched(false)
+    } else {
+        setPasswordMatchingError("");
+        setIsPasswordMatched(true)
+    }
+  };
+
+  const createSignUp = (data) => {
     fetch(`/api/v1/accounts`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({account: data}),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Success:', data);
-        if (data.status === "failure") {
-          // Handle failure (e.g., show error messages)
-        } else {
-          // Handle success (e.g., redirect or show success message)
-        }
-      })
-      .catch((error) => {
-        console.log('Error:', error);
-      });
+    .then((response) => {
+      const status = response.status
+      return response.json().then((data) => ({ status, data }))
+    })
+    .then(({ status, data }) => {
+      if (status === 422) {
+        setIsServerSideError(true);
+        setServerErrors(data.errors);
+      } else {
+        setIsServerSideError(false);
+        setServerErrors([]);
+        navigate(`/questions`)
+      }
+    })
+    .catch((error) => {
+    })
   };
 
   return (
@@ -62,6 +80,7 @@ const SignUp = () => {
                     onChange={handleInputChange}
                     className="form-control form-control-lg"
                   />
+                <p className="text-danger">{serverErrors.name}</p>
                 </div>
 
                 <div data-mdb-input-init className="form-outline mb-4">
@@ -73,6 +92,7 @@ const SignUp = () => {
                     onChange={handleInputChange}
                     className="form-control form-control-lg"
                   />
+                  <p className="text-danger">{serverErrors.email}</p>
                 </div>
 
                 <div data-mdb-input-init className="form-outline mb-4">
@@ -84,6 +104,7 @@ const SignUp = () => {
                     onChange={handleInputChange}
                     className="form-control form-control-lg"
                   />
+                  <p className="text-danger">{serverErrors.password}</p>
                 </div>
 
                 <div data-mdb-input-init className="form-outline mb-4">
@@ -92,9 +113,10 @@ const SignUp = () => {
                     type="password"
                     name="passwordConfirmation"
                     value={formField.passwordConfirmation}
-                    onChange={handleInputChange}
+                    onChange={handlePasswordMatching}
                     className="form-control form-control-lg"
                   />
+                  <p className="text-danger">{passwordMatchingError}</p>
                 </div>
 
                 <div className="form-check d-flex justify-content-center mb-5">
@@ -102,9 +124,8 @@ const SignUp = () => {
                     className="form-check-input me-2"
                     type="checkbox"
                     name="termsAgreed"
-                    checked={formField.termsAgreed}
-                    onChange={handleInputChange}
                     id="form2Example3cg"
+                    required
                   />
                   <label className="form-check-label">
                     I agree all statements in <a href="#!" className="text-body"><u>Terms of service</u></a>
@@ -112,7 +133,7 @@ const SignUp = () => {
                 </div>
 
                 <div className="d-flex justify-content-center">
-                  <button type="submit" className="btn btn-success btn-block btn-lg gradient-custom-4 text-body">
+                  <button type="submit" className="btn btn-success btn-block btn-lg gradient-custom-4 text-body" disabled={!isPasswordMatched}>
                     Register
                   </button>
                 </div>
