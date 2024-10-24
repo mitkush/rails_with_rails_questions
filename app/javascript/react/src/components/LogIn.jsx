@@ -8,7 +8,6 @@ const LogIn = () => {
   const [isServerSideError, setIsServerSideError] = useState(false)
   const [serverErrors, setServerErrors] = useState({})
   const [formField, setFormField] = useState({
-    name: '',
     email: '',
     password: '',
   });
@@ -42,21 +41,23 @@ const LogIn = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({account: data}),
+      body: JSON.stringify(data),
     })
     .then((response) => {
       const status = response.status
       return response.json().then((data) => ({ status, data }))
     })
     .then(({ status, data }) => {
-      console.log(status, data)
       if (status != 200) {
         setIsServerSideError(true);
         setServerErrors(data.errors);
       } else {
+        localStorage.setItem('isLogIn', true);
+        localStorage.setItem('account', JSON.stringify(data.account));
+        localStorage.setItem('token', data.token);
         setIsServerSideError(false);
         setServerErrors({});
-        // navigate(`/questions`)
+        navigate(`/questions`)
       }
     })
     .catch((error) => {

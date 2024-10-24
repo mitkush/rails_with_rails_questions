@@ -9,6 +9,7 @@ const Welcome = () => {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<QuestionList />} />
         <Route path="/questions" element={<QuestionList />} />
         <Route path="/questions/:id" element={<ShowQuestion />} />
         <Route path="/SignUp" element={<SignUp />} />

@@ -55,6 +55,8 @@ const SignUp = () => {
         setIsServerSideError(true);
         setServerErrors(data.errors);
       } else {
+        localStorage.setItem('account', JSON.stringify(data.account));
+        localStorage.setItem('token', data.token);
         setIsServerSideError(false);
         setServerErrors([]);
         navigate(`/questions`)
