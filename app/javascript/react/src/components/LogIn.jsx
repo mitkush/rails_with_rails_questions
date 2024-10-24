@@ -37,7 +37,7 @@ const LogIn = () => {
   };
 
   const createLogIn = (data) => {
-    fetch(`/api/v1/accounts`, {
+    fetch(`/api/v1/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -49,13 +49,14 @@ const LogIn = () => {
       return response.json().then((data) => ({ status, data }))
     })
     .then(({ status, data }) => {
-      if (status === 422) {
+      console.log(status, data)
+      if (status != 200) {
         setIsServerSideError(true);
         setServerErrors(data.errors);
       } else {
         setIsServerSideError(false);
-        setServerErrors([]);
-        navigate(`/questions`)
+        setServerErrors({});
+        // navigate(`/questions`)
       }
     })
     .catch((error) => {
@@ -79,7 +80,6 @@ const LogIn = () => {
                     onChange={handleInputChange}
                     className="form-control form-control-lg"
                   />
-                  <p className="text-danger">{serverErrors.email}</p>
                 </div>
 
                 <div data-mdb-input-init className="form-outline mb-4">
@@ -91,7 +91,7 @@ const LogIn = () => {
                     onChange={handleInputChange}
                     className="form-control form-control-lg"
                   />
-                  <p className="text-danger">{serverErrors.password}</p>
+                  <p className="text-danger">{serverErrors.login}</p>
                 </div>
 
                 <div className="d-flex justify-content-center">
