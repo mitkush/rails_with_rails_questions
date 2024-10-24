@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import ServerSideError from './ServerSideError';
 import { useNavigate } from "react-router-dom";
-import LogIn from './LogIn'
+import SignUp from './SignUp'
 
 
-const SignUp = () => {
+const LogIn = () => {
   const [isServerSideError, setIsServerSideError] = useState(false)
   const [serverErrors, setServerErrors] = useState({})
   const [formField, setFormField] = useState({
@@ -13,17 +13,15 @@ const SignUp = () => {
     password: '',
   });
   const navigate = useNavigate();
-  const [passwordMatchingError, setPasswordMatchingError] = useState("");
-  const [isPasswordMatched, setIsPasswordMatched] = useState(false);
 
   const handleInputChange = () => {
     const { name, value, type, checked } = event.target;
     setFormField({...formField, [name]: value });
   };
 
-  const handleSignUpSubmit = () => {
+  const handleLogInSubmit = () => {
     event.preventDefault();
-    createSignUp(formField);
+    createLogIn(formField);
   };
 
   const handlePasswordMatching = (event) => {
@@ -38,7 +36,7 @@ const SignUp = () => {
     }
   };
 
-  const createSignUp = (data) => {
+  const createLogIn = (data) => {
     fetch(`/api/v1/accounts`, {
       method: 'POST',
       headers: {
@@ -70,20 +68,8 @@ const SignUp = () => {
         <div className="col-md-6 d-flex align-items-center justify-content-center">
           <div className="card">
             <div className="card-body p-5">
-              <h2 className="text-uppercase text-center mb-5">Create an account</h2>
-              <form onSubmit={handleSignUpSubmit}>
-                <div data-mdb-input-init className="form-outline mb-4">
-                  <label className="form-label">Your Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formField.name}
-                    onChange={handleInputChange}
-                    className="form-control form-control-lg"
-                  />
-                <p className="text-danger">{serverErrors.name}</p>
-                </div>
-
+              <h2 className="text-uppercase text-center mb-5">Welcome</h2>
+              <form onSubmit={handleLogInSubmit}>
                 <div data-mdb-input-init className="form-outline mb-4">
                   <label className="form-label">Your Email</label>
                   <input
@@ -108,51 +94,25 @@ const SignUp = () => {
                   <p className="text-danger">{serverErrors.password}</p>
                 </div>
 
-                <div data-mdb-input-init className="form-outline mb-4">
-                  <label className="form-label">Repeat your password</label>
-                  <input
-                    type="password"
-                    name="passwordConfirmation"
-                    value={formField.passwordConfirmation}
-                    onChange={handlePasswordMatching}
-                    className="form-control form-control-lg"
-                  />
-                  <p className="text-danger">{passwordMatchingError}</p>
-                </div>
-
-                <div className="form-check d-flex justify-content-center mb-5">
-                  <input
-                    className="form-check-input me-2"
-                    type="checkbox"
-                    name="termsAgreed"
-                    id="form2Example3cg"
-                    required
-                  />
-                  <label className="form-check-label">
-                    I agree all statements in <a href="#!" className="text-body"><u>Terms of service</u></a>
-                  </label>
-                </div>
-
                 <div className="d-flex justify-content-center">
-                  <button type="submit" className="btn btn-success btn-block btn-lg gradient-custom-4 text-body" disabled={!isPasswordMatched}>
-                    Register
+                  <button type="submit" className="btn btn-success btn-block btn-lg gradient-custom-4 text-body">
+                    Log In
                   </button>
                 </div>
 
                 <p className="text-center text-muted mt-5 mb-0">
-                  Have already an account? <u className="fw-bold text-body" onClick={() => navigate(`/LogIn`)}>Login here</u>
+                  Not have an account? <u className="fw-bold text-body" onClick={() => navigate(`/SignUp`)}>Signup here</u>
                 </p>
               </form>
             </div>
           </div>
         </div>
-
         <div className="col-md-6 d-flex align-items-center justify-content-center">
-          <img src={`${window.location.origin}/assets/sZmfyrWuzHTfzLdwJuj1ALQcBtbKAtbA.jpg`} alt="Description" className="img-fluid" />
+          <img src={`${window.location.origin}/assets/login_image.png `} alt="Description" className="img-fluid" />
         </div>
       </div>
     </>
   );
 };
 
-export default SignUp;
+export default LogIn;
