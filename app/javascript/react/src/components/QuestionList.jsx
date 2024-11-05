@@ -5,8 +5,8 @@ import QuestionDetail from "./QuestionDetail"
 import EmptyQuestionMessage from './EmptyQuestionMessage'
 import Loader from './Loader'
 import NewQuestion from './NewQuestion'
-import SignUp from './SignUp';
-import LogIn from './LogIn';
+import SideBar from './SideBar';
+import NavBar from './NavBar';
 import { useNavigate } from "react-router-dom";
 
 const QuestionList = () => {
@@ -25,7 +25,6 @@ const QuestionList = () => {
   const [isShowAlert, setIsShowAlert] = useState(false)
   const [isShowLoader, setIsShowLoader] = useState(true)
   const [isLogedIn, setIsLogedIn] = useState(false)
-  const [loginToken, setLoginToken] = useState('')
   const [storedAccount, setStoredAccount] = useState({})
   const navigate = useNavigate();
 
@@ -68,61 +67,47 @@ const QuestionList = () => {
 
   const updateLogInStatus = () => {
     const isLogedIn = localStorage.getItem('isLogedIn');
-    const token = localStorage.getItem('token');
     const account = localStorage.getItem('account');
 
-    if (token) {
+    if (isLogedIn) {
       setIsLogedIn(true);
-      setLoginToken(token);
       setStoredAccount(JSON.parse(account))
     }
   }
 
-  const logOut = () => {
-    setIsLogedIn(false);
-    localStorage.clear();
-    navigate('/questions');
-  };
-
   return(
     <div>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '1em' }}>
-        <button type="button" className="btn btn-info mt-3 mb-3" style={{ marginLeft: '1em' }} onClick={() => navigate(`/SignUp`)} hidden={isLogedIn}>
-          Sign Up
-        </button>
-        <button type="button" className="btn btn-success mt-3 mb-3" style={{ marginLeft: '1em' }} onClick={() => navigate(`/LogIn`)} hidden={isLogedIn}>
-          Log In
-        </button>
+      <div className="container-fluid">
+        <div className="row flex-nowrap">
+          <div className="col-auto col-md-3 col-xl-2 bg-dark position-sticky" style={{ top: '0', height: '100vh' }}>
+            <SideBar />
+          </div>
 
-        <button type="button" className="btn btn-success mt-3 mb-3" onClick={logOut} hidden={!isLogedIn}>
-          Log Out
-        </button>
-      </div>
+          <div className="col-md-9 col-xl-10" style={{ padding: '0' }}>
+            <div className="position-sticky" style={{ top: '0', zIndex: 1000 }}>
+              <NavBar />
+            </div>
 
-      <div className="row">
-        <div className="col-lg-10 mx-auto">
-          <p className="lead fw-bold">Filter Questions by Tags</p>
-          <button type="button" className="btn btn-primary mt-3 mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            Contribute your Question
-          </button>
-          <select
-            className="form-select form-select-lg rounded-0"
-            value={selectedOption}
-            onChange={event => updateSelectedItem(event)}>
-            {questionsTags.map(tag => (
-              <option key={tag.value} value={tag.value}>{tag.label}</option>
-            ))}
-          </select>
-          { questionsList.length > 0 ?
-            questionsList.map((question) =>
-              <div key={question.id}>
-                <QuestionDetail question={question} />
-              </div>
-            ) : <Loader isShowLoader={isShowLoader} />
-          }
-          { isShowAlert && <EmptyQuestionMessage tagname={questionsTags[selectedOption].label}/> }
+            <div className="col-lg-10 mx-auto">
+              <p className="lead fw-bold">Filter Questions by Tags</p>
+              <button type="button" className="btn btn-primary mt-3 mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Contribute your Question
+              </button>
+              <select className="form-select form-select-lg rounded-0" value={selectedOption} onChange={event => updateSelectedItem(event)} >
+                {questionsTags.map(tag => (
+                  <option key={tag.value} value={tag.value}>{tag.label}</option>
+                ))}
+              </select>
+              {questionsList.length > 0 ? questionsList.map((question) =>
+                <div key={question.id}>
+                  <QuestionDetail question={question} />
+                </div>
+              ) : <Loader isShowLoader={isShowLoader} />}
+              {isShowAlert && <EmptyQuestionMessage tagname={questionsTags[selectedOption].label} />}
+            </div>
+            <NewQuestion isLogedIn={isLogedIn} />
+          </div>
         </div>
-        <NewQuestion isLogedIn={isLogedIn}/>
       </div>
     </div>
   )

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import QuestionDetail from "./QuestionDetail"
+import SideBar from "./SideBar"
+import NavBar from "./NavBar"
 
 const ShowQuestion = () => {
   const { id } = useParams()
@@ -48,7 +50,24 @@ const ShowQuestion = () => {
 
   return (
     <div>
-      <QuestionDetail question={questionDetails} />
+      <div>
+        <div className="container-fluid">
+          <div className="row flex-nowrap">
+            <div className="col-auto col-md-3 col-xl-2 bg-dark position-sticky">
+              <SideBar />
+            </div>
+
+            <div className="col-md-9 col-xl-10" style={{ padding: '0', overflow: 'hidden' }}>
+              <div>
+                <NavBar />
+              </div>
+              <div className="col-lg-10 mx-auto">
+              <QuestionDetail question={questionDetails} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
