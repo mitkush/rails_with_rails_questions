@@ -31,6 +31,12 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
+  # Ensure this line exists to enable serving static files during development.
+  config.public_file_server.enabled = true
+
+  # Set this to true to serve assets dynamically during development (Rails should handle this).
+  config.assets.compile = true
+
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
