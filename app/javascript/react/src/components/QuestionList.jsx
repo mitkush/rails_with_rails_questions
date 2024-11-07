@@ -27,6 +27,11 @@ const QuestionList = () => {
   const [isLogedIn, setIsLogedIn] = useState(false)
   const [storedAccount, setStoredAccount] = useState({})
   const navigate = useNavigate();
+  const [isCollapsed, setIsCollapsed] = useState(false)
+
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+  };
 
   const questionsUrl = '/api/v1/questions'
 
@@ -76,37 +81,58 @@ const QuestionList = () => {
   }
 
   return(
-    <div>
-      <div className="container-fluid">
-        <div className="row flex-nowrap">
-          <div className="col-auto col-md-3 col-xl-2 bg-dark position-sticky" style={{ top: '0', height: '100vh' }}>
-            <SideBar />
+    <div className="container-fluid" style={{ overflowX: 'hidden' }}>
+      <div className="row flex-nowrap" style={{ minWidth: '0' }}>
+        <div
+          className={`col-auto bg-dark position-sticky ${isCollapsed ? "collapsed-sidebar" : ""}`}
+          style={{
+            top: "0",
+            height: "100vh",
+            transition: "width 0.3s ease-in-out",
+            width: isCollapsed ? "60px" : "250px",
+            flexShrink: 0,
+            overflow: "hidden",
+          }}
+        >
+          <SideBar toggleSidebar={toggleSidebar} isCollapsed={isCollapsed} />
+        </div>
+
+        <div className="col" style={{ padding: '0' }}>
+          <div className="position-sticky" style={{ top: '0', zIndex: 1000 }}>
+            <NavBar />
           </div>
 
-          <div className="col-md-9 col-xl-10" style={{ padding: '0' }}>
-            <div className="position-sticky" style={{ top: '0', zIndex: 1000 }}>
-              <NavBar />
-            </div>
-
-            <div className="col-lg-10 mx-auto">
-              <p className="lead fw-bold">Filter Questions by Tags</p>
-              <button type="button" className="btn btn-primary mt-3 mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Contribute your Question
-              </button>
-              <select className="form-select form-select-lg rounded-0" value={selectedOption} onChange={event => updateSelectedItem(event)} >
-                {questionsTags.map(tag => (
-                  <option key={tag.value} value={tag.value}>{tag.label}</option>
-                ))}
-              </select>
-              {questionsList.length > 0 ? questionsList.map((question) =>
-                <div key={question.id}>
-                  <QuestionDetail question={question} />
-                </div>
-              ) : <Loader isShowLoader={isShowLoader} />}
-              {isShowAlert && <EmptyQuestionMessage tagname={questionsTags[selectedOption].label} />}
-            </div>
-            <NewQuestion isLogedIn={isLogedIn} />
+          <div className="col-lg-10 mx-auto" style={{ paddingTop: "20px" }}>
+            <p className="lead fw-bold">Filter Questions by Tags</p>
+            <button
+              type="button"
+              className="btn btn-primary mt-3 mb-3"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+            >
+              Contribute your Question
+            </button>
+            <select
+              className="form-select form-select-lg rounded-0"
+              value={selectedOption}
+              onChange={(event) => updateSelectedItem(event)}
+            >
+              {questionsTags.map((tag) => (
+                <option key={tag.value} value={tag.value}>
+                  {tag.label}
+                </option>
+              ))}
+            </select>
+            {questionsList.length > 0
+              ? questionsList.map((question) => (
+                  <div key={question.id}>
+                    <QuestionDetail question={question} />
+                  </div>
+                ))
+              : <Loader isShowLoader={isShowLoader} />}
+            {isShowAlert && <EmptyQuestionMessage tagname={questionsTags[selectedOption].label} />}
           </div>
+          <NewQuestion isLogedIn={isLogedIn} />
         </div>
       </div>
     </div>
