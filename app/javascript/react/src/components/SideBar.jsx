@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const SideBar = () => {
+const SideBar = ({ logOut }) => {
   const navigate = useNavigate();
 
   return (
@@ -29,7 +29,7 @@ const SideBar = () => {
             <span className="d-none d-sm-inline mx-1">loser</span>
           </a>
           <ul className="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-            <li><a className="dropdown-item" href="#">Sign out</a></li>
+            <li><a className="dropdown-item" href="" onClick={logOut}>Sign out</a></li>
           </ul>
         </div>
       </div>

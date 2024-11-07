@@ -75,17 +75,24 @@ const QuestionList = () => {
     }
   }
 
+  const logOut = () => {
+    setIsLogedIn(false);
+    localStorage.clear();
+    navigate('/questions');
+    window.location.reload();
+  };
+
   return(
     <div>
       <div className="container-fluid">
         <div className="row flex-nowrap">
           <div className="col-auto col-md-3 col-xl-2 bg-dark position-sticky" style={{ top: '0', height: '100vh' }}>
-            <SideBar />
+            <SideBar logOut={logOut} />
           </div>
 
           <div className="col-md-9 col-xl-10" style={{ padding: '0' }}>
             <div className="position-sticky" style={{ top: '0', zIndex: 1000 }}>
-              <NavBar />
+              <NavBar logOut={logOut} />
             </div>
 
             <div className="col-lg-10 mx-auto">
